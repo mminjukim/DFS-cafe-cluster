@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>성북구 카페 거리 분석</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>DFS를 이용한 성북구 카페 거리 분석</h1>
+    <p class="subtitle">컴퓨터학전공 20230774 김민주 / DFS 연결 요소(Connected Components) 군집화 분석</p>
+</header>
+
+<div class="controls">
+    <form action="/" method="get" id="filterForm">
+        <label for="distanceRange">군집 연결 거리 설정 (반경)</label>
+
+        <div class="range-wrap">
+            <input type="range" id="distanceRange" name="distance"
+                   min="10" max="100" step="10"
+                   th:value="${currentDistance}"
+                   oninput="document.getElementById('rangeVal').innerText = this.value + 'm'"
+                   onchange="document.getElementById('filterForm').submit()">
+
+            <span id="rangeVal" class="range-value" th:text="${currentDistance} + 'm'">50m</span>
+        </div>
+
+        <p style="font-size: 0.85rem; color: #8d6e63; margin-top: 10px;">
+            슬라이더를 드래그하여 카페 간 연결 임계값을 조절하세요.
+        </p>
+    </form>
+</div>
+
+<div class="stats">
+    현재 임계값: <span th:text="${currentDistance} + 'm'">50m</span> |
+    발견된 카페 군집: <span th:text="${totalClusters}">0</span>개
+</div>
+
+<div class="container">
+    <div class="card" th:each="cluster, stat : ${clusters}">
+        <div class="cluster-header">
+            <div style="display: flex; align-items: center;">
+                <span class="cluster-id" th:text="'카페 군집 #' + ${stat.count}">카페 군집 #1</span>
+
+                <span class="badge-hot" th:if="${cluster.size() >= 12}">
+                    🔥 핫플레이스
+                </span>
+            </div>
+            <span class="cluster-size" th:text="${cluster.size()} + '곳'">5곳</span>
+        </div>
+
+        <ul class="shop-list">
+            <li th:each="shop : ${cluster}">
+                <span class="shop-name" th:text="${shop.name}">스타벅스 성북점</span>
+                <span class="shop-addr" th:text="${shop.address}">서울시 성북구 ...</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
