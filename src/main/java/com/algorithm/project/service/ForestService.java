@@ -17,7 +17,7 @@ public class ForestService {
 
     private final CoffeeShopRepository coffeeShopRepository;
 
-    private static final int MIN_CLUSTER_SIZE = 3;
+    private static final int MIN_CLUSTER_SIZE = 5;
 
 
     /**
