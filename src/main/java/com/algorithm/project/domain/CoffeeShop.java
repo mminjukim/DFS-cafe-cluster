@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Getter
@@ -21,4 +22,7 @@ public class CoffeeShop {
     private String address;     // 도로명주소
     private Double longitude;   // 경도(x)
     private Double latitude;    // 위도(y)
+
+    @Transient
+    private boolean isCenter = false;
 }

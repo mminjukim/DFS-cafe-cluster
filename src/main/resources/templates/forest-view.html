@@ -59,8 +59,61 @@
                 <span class="shop-addr" th:text="${shop.address}">서울시 성북구 ...</span>
             </li>
         </ul>
+
+        <div class="card-footer">
+            <button class="btn-find-center"
+                    onclick="findCenter(this)"
+                    th:data-shop-ids="${cluster.![id]}">
+                <span>🔍 카페 거리 내 중심 카페 찾기</span>
+            </button>
+            <div class="center-result-box"></div>
+        </div>
     </div>
 </div>
+
+<script>
+    async function findCenter(button) {
+        const resultBox = button.nextElementSibling;
+        const shopIdsStr = button.getAttribute('data-shop-ids');
+        const shopIds = JSON.parse(shopIdsStr);
+
+        // 로딩 상태 변경
+        button.innerHTML = '<span>⏳ 계산 중...</span>';
+        button.classList.add('loading');
+        button.disabled = true;
+
+        try {
+            // 서버 요청
+            const response = await fetch('/api/analysis/center', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(shopIds) // ID 리스트 전송
+            });
+
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const centerShop = await response.json(); // 응답 CoffeeShop 객체
+
+            // 결과 표시
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <span class="center-badge">👑 CENTER</span>
+                ${centerShop.name}
+            `;
+
+            button.innerHTML = '<span>✅ 분석 완료</span>';
+
+        } catch (error) {
+            console.error('Error:', error);
+            button.innerHTML = '<span>⚠️ 오류 발생</span>';
+            button.disabled = false;
+            button.classList.remove('loading');
+            alert('중심 카페를 찾는 중 오류가 발생했습니다.');
+        }
+    }
+</script>
 
 </body>
 </html>

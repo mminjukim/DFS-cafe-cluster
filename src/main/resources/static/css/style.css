@@ -286,3 +286,62 @@ ul.shop-list::-webkit-scrollbar-track {
         transform: scale(1);
     }
 }
+
+/* 11. 중심 카페 찾기 버튼 및 결과 영역 */
+.card-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+    text-align: center;
+}
+
+.btn-find-center {
+    background-color: var(--text-main);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-find-center:hover {
+    background-color: var(--text-sub);
+}
+
+/* 로딩 중일 때 버튼 스타일 */
+.btn-find-center.loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+/* 결과 표시 박스 */
+.center-result-box {
+    margin-top: 15px;
+    background-color: #fff9c4;
+    border: 2px solid var(--accent-yellow);
+    color: var(--text-main);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: none;
+    animation: slideUp 0.3s ease-out;
+}
+
+.center-badge {
+    display: inline-block;
+    background-color: var(--accent-orange);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 0.8rem;
+}

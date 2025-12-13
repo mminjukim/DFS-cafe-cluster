@@ -48,6 +48,44 @@ public class ForestService {
         return clusters;
     }
 
+    /**
+     * 특정 군집 내에서 '중심(Center)'이 되는 카페를 찾습니다.
+     * 근접 중심성(Closeness Centrality) 개념을 응용하여,
+     * 다른 모든 카페까지의 거리 합이 가장 작은 카페를 선택합니다.
+     *
+     * @param shopIds 분석할 카페 군집의 각 카페 id 리스트
+     * @return 중심 카페 객체
+     */
+    public CoffeeShop findCenterInCluster(List<Long> shopIds) {
+        if (shopIds == null || shopIds.isEmpty()) {
+            return null;
+        }
+
+        List<CoffeeShop> cluster = coffeeShopRepository.findAllById(shopIds);
+        CoffeeShop centerShop = null;
+        double minTotalDistance = Double.MAX_VALUE; // 최소 거리 합을 저장할 변수
+
+        for (CoffeeShop current : cluster) {
+            double totalDistance = 0.0;
+
+            for (CoffeeShop target : cluster) {
+                if (current.equals(target)) continue; // 자기 자신은 제외
+                // 현재 카페에서 타겟 카페까지의 거리 누적
+                totalDistance += calculateDistance(
+                        current.getLatitude(), current.getLongitude(),
+                        target.getLatitude(), target.getLongitude()
+                );
+            }
+
+            // 거리의 합이 현재까지의 최소값보다 작다면 갱신 (현재 카페가 중심이 됨)
+            if (totalDistance < minTotalDistance) {
+                minTotalDistance = totalDistance;
+                centerShop = current;
+            }
+        }
+        return centerShop;
+    }
+
 
     /**
      * DFS 알고리즘을 이용해 연결된 모든 노드를 찾습니다.

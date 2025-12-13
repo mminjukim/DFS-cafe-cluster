@@ -5,8 +5,7 @@ import com.algorithm.project.service.ForestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +27,11 @@ public class ForestController {
         model.addAttribute("currentDistance", distance);
 
         return "forest-view";
+    }
+
+    @PostMapping("/api/analysis/center")
+    @ResponseBody
+    public CoffeeShop findCenterShop(@RequestBody List<Long> shopIds) {
+        return forestService.findCenterInCluster(shopIds);
     }
 }
